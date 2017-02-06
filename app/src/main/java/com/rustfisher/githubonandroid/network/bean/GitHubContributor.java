@@ -1,8 +1,5 @@
 package com.rustfisher.githubonandroid.network.bean;
 
-/**
- * Created by Rust Fisher on 2017/2/6.
- */
 
 public class GitHubContributor {
     private String login;

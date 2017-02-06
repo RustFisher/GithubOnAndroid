@@ -26,14 +26,21 @@ public class NetworkCenter {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build();
 
+    public static Retrofit getGithubRetrofit() {
+        return githubRetrofit;
+    }
+
+    /**
+     * @deprecated use rx
+     */
     public static void getContributors(String owner, String repo, Callback callback) {
         GitHubService githubService = githubRetrofit.create(GitHubService.class);
         Call<List<GitHubContributor>> callSquare = githubService.contributors(owner, repo);
         callSquare.enqueue(callback);
     }
 
-    public static Observable rxGetContributors(String owner, String repo) {
-        GitHubService githubService = githubRetrofit.create(GitHubService.class);
-        return githubService.rxContributors(owner, repo);
+
+    public static Observable getContributorsObs(String owner, String repo) {
+        return getGithubRetrofit().create(GitHubService.class).rxContributors(owner, repo);
     }
 }

@@ -10,8 +10,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.rustfisher.githubonandroid.activity.MainActivity">
 
+    <RelativeLayout
+        android:id="@+id/reLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ownerEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:hint="@string/owner"
+            android:minWidth="60dp"
+            android:textSize="@dimen/text_size_1" />
+
+        <EditText
+            android:id="@+id/repoEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@id/ownerEt"
+            android:hint="@string/repo"
+            android:minWidth="80dp"
+            android:textSize="@dimen/text_size_1" />
+
+        <Button
+            android:id="@+id/loadBt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/load_info"
+            android:textSize="@dimen/text_size_1" />
+
+    </RelativeLayout>
+
     <TextView
+        android:id="@+id/infoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_below="@id/reLayout1" />
+
 </RelativeLayout>

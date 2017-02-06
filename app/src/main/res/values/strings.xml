@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GithubOnAndroid</string>
+
+    <string name="owner">owner</string>
+    <string name="repo">repo</string>
+    <string name="load_info">Load</string>
 </resources>

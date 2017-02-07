@@ -15,41 +15,79 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/ownerEt"
+        <TextView
+            android:id="@+id/ownerTv"
+            style="@style/reStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:text="Owner:" />
+
+        <EditText
+            android:id="@+id/ownerEt"
+            style="@style/reStyle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/ownerTv"
             android:hint="@string/owner"
-            android:minWidth="60dp"
-            android:textSize="@dimen/text_size_1" />
+            android:minWidth="60dp" />
+
+        <TextView
+            android:id="@+id/repoTv"
+            style="@style/reStyle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/ownerEt"
+            android:text="Repo:" />
 
         <EditText
             android:id="@+id/repoEt"
+            style="@style/reStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
-            android:layout_toEndOf="@id/ownerEt"
+            android:layout_toEndOf="@id/repoTv"
             android:hint="@string/repo"
-            android:minWidth="80dp"
-            android:textSize="@dimen/text_size_1" />
+            android:minWidth="80dp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reLayout1"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/loadBt1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_weight="49"
+            android:background="@drawable/se_btn_bg"
             android:text="@string/load_info"
             android:textSize="@dimen/text_size_1" />
 
-    </RelativeLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/loadRepoBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="49"
+            android:background="@drawable/se_btn_bg"
+            android:text="@string/load_repos"
+            android:textSize="@dimen/text_size_1" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/infoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reLayout1" />
+        android:layout_below="@id/linLayout1" />
 
 </RelativeLayout>

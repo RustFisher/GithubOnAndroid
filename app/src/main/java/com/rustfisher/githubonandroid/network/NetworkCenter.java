@@ -1,10 +1,12 @@
 package com.rustfisher.githubonandroid.network;
 
 import com.rustfisher.githubonandroid.network.bean.GitHubContributor;
-import com.rustfisher.githubonandroid.network.service.GitHubService;
+import com.rustfisher.githubonandroid.network.service.IGitHubService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -19,11 +21,18 @@ import rx.Observable;
 public class NetworkCenter {
     public static final String GITHUB_BASE_URL = "https://api.github.com/";
     public static final String GITHUB_CONTRIBUTORS_URL = "repos/{owner}/{repo}/contributors";
+    public static final String GITHUB_REPO_URL = "users/{owner}/repos";
+
+    private static OkHttpClient githubOKClient = new OkHttpClient.Builder()
+            .readTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .build();
 
     private static Retrofit githubRetrofit = new Retrofit.Builder()
             .baseUrl(GITHUB_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .client(githubOKClient)
             .build();
 
     public static Retrofit getGithubRetrofit() {
@@ -34,13 +43,17 @@ public class NetworkCenter {
      * @deprecated use rx
      */
     public static void getContributors(String owner, String repo, Callback callback) {
-        GitHubService githubService = githubRetrofit.create(GitHubService.class);
-        Call<List<GitHubContributor>> callSquare = githubService.contributors(owner, repo);
+        IGitHubService githubServiceI = githubRetrofit.create(IGitHubService.class);
+        Call<List<GitHubContributor>> callSquare = githubServiceI.contributors(owner, repo);
         callSquare.enqueue(callback);
     }
 
 
     public static Observable getContributorsObs(String owner, String repo) {
-        return getGithubRetrofit().create(GitHubService.class).rxContributors(owner, repo);
+        return getGithubRetrofit().create(IGitHubService.class).rxContributors(owner, repo);
+    }
+
+    public static Observable getAllRepoObs(String owner) {
+        return getGithubRetrofit().create(IGitHubService.class).repos(owner);
     }
 }

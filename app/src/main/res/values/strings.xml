@@ -3,5 +3,6 @@
 
     <string name="owner">owner</string>
     <string name="repo">repo</string>
-    <string name="load_info">Load</string>
+    <string name="load_info">Load info</string>
+    <string name="load_repos">Load repos</string>
 </resources>

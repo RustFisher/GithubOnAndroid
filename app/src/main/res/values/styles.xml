@@ -2,16 +2,19 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorBg3</item>
+        <item name="colorPrimaryDark">@color/colorBg4</item>
+        <item name="colorAccent">@color/colorBg5</item>
     </style>
 
-    <!-- Use in Main page -->
-    <style name="reStyle1">
+    <style name="NoTitleThemeCompat" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="textStyle1">
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/text_size_1</item>
+        <item name="android:textColor">@color/colorText4</item>
     </style>
 
 </resources>

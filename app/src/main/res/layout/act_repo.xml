@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="10dp"
+    android:paddingStart="12dp"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/repoOwnerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/owner"
+        android:textColor="@color/colorText2"
+        android:textSize="@dimen/text_size_4" />
+
+    <TextView
+        android:id="@+id/divider1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_toEndOf="@id/repoOwnerTv"
+        android:text="/"
+        android:textColor="@color/colorText4"
+        android:textSize="@dimen/text_size_4" />
+
+    <TextView
+        android:id="@+id/repoNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/divider1"
+        android:text="@string/repo"
+        android:textColor="@color/colorText4"
+        android:textSize="@dimen/text_size_4" />
+
+    <TextView
+        android:id="@+id/forkInfoTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/repoOwnerTv"
+        android:textColor="@color/colorText2"
+        android:textSize="@dimen/text_size_1" />
+</RelativeLayout>

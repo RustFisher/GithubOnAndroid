@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Card style -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/repoItemRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="1dp"
+    android:background="@drawable/shape_rectangle_3"
+    android:paddingBottom="2dp"
+    android:paddingEnd="2dp"
+    android:paddingStart="4dp"
+    android:paddingTop="1dp">
+
+    <LinearLayout
+        android:id="@+id/repoItemLinLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/repoItemNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText2"
+            android:textSize="@dimen/text_size_3" />
+
+        <TextView
+            android:id="@+id/repoItemForkFromTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText3"
+            android:textSize="@dimen/text_size_0" />
+
+        <TextView
+            android:id="@+id/repoItemDescriptionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="4"
+            android:textColor="@color/colorText3"
+            android:textSize="@dimen/text_size_1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/repoItemLinLayout1"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/repoItemLanguageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText3"
+            android:textSize="@dimen/text_size_1" />
+
+        <TextView
+            android:id="@+id/repoItemStarTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textSize="@dimen/text_size_1" />
+
+        <TextView
+            android:id="@+id/repoItemUpdatedTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/colorText3"
+            android:textSize="@dimen/text_size_1" />
+    </LinearLayout>
+
+</RelativeLayout>

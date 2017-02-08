@@ -4,7 +4,6 @@
     android:id="@+id/act_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -17,23 +16,25 @@
 
         <TextView
             android:id="@+id/ownerTv"
-            style="@style/reStyle1"
+            style="@style/textStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Owner:" />
 
         <EditText
             android:id="@+id/ownerEt"
-            style="@style/reStyle1"
+            style="@style/textStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/ownerTv"
             android:hint="@string/owner"
-            android:minWidth="60dp" />
+            android:inputType="text"
+            android:minWidth="60dp"
+            android:textColorHint="@color/colorText3" />
 
         <TextView
             android:id="@+id/repoTv"
-            style="@style/reStyle1"
+            style="@style/textStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -42,13 +43,14 @@
 
         <EditText
             android:id="@+id/repoEt"
-            style="@style/reStyle1"
+            style="@style/textStyle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@id/repoTv"
             android:hint="@string/repo"
-            android:minWidth="80dp" />
+            android:minWidth="80dp"
+            android:textColorHint="@color/colorText3" />
 
     </RelativeLayout>
 
@@ -89,5 +91,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/linLayout1" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/infoReView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linLayout1"
+        android:layout_marginTop="12dp" />
+
 
 </RelativeLayout>

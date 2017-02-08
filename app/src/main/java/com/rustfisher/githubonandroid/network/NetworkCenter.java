@@ -19,9 +19,15 @@ import rx.Observable;
  * Created by Rust Fisher on 2017/2/6.
  */
 public class NetworkCenter {
+    public static final String K_REPO_FULL_NAME = "repo_full_name";
+    public static final String K_REPO_NAME = "repo_name";
+    public static final String K_OWNER = "owner";
+    public static final String K_REPO_IS_FORK_FROM = "repo_is_fork_from"; // fork from other
+
     public static final String GITHUB_BASE_URL = "https://api.github.com/";
     public static final String GITHUB_CONTRIBUTORS_URL = "repos/{owner}/{repo}/contributors";
-    public static final String GITHUB_REPO_URL = "users/{owner}/repos";
+    public static final String GITHUB_REPO_URL = "repos/{owner}/{repo}";
+    public static final String GITHUB_USER_REPO_URL = "users/{owner}/repos";
 
     private static OkHttpClient githubOKClient = new OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
@@ -53,7 +59,12 @@ public class NetworkCenter {
         return getGithubRetrofit().create(IGitHubService.class).rxContributors(owner, repo);
     }
 
-    public static Observable getAllRepoObs(String owner) {
-        return getGithubRetrofit().create(IGitHubService.class).repos(owner);
+    public static Observable getUserRepoObs(String owner) {
+        return getGithubRetrofit().create(IGitHubService.class).userRepo(owner);
+    }
+
+    // Get repo by repo full name
+    public static Observable getRepoDetailObs(String owner, String repo) {
+        return getGithubRetrofit().create(IGitHubService.class).repo(owner, repo);
     }
 }

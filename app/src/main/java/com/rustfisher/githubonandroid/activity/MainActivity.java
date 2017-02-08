@@ -1,7 +1,9 @@
 package com.rustfisher.githubonandroid.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,10 @@ import com.rustfisher.githubonandroid.R;
 import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.GitHubContributor;
 import com.rustfisher.githubonandroid.network.bean.Repo;
+import com.rustfisher.githubonandroid.network.bean.UserRepo;
+import com.rustfisher.githubonandroid.widget.UserRepoInfo;
+import com.rustfisher.githubonandroid.widget.ViewStore;
+import com.rustfisher.githubonandroid.widget.recyclerview.RepoListAdapter;
 
 import java.util.ArrayList;
 
@@ -25,7 +31,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "rustApp";
 
@@ -35,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText mRepoEt;
     @BindView(R.id.infoTv)
     TextView mInfoTv;
+    @BindView(R.id.infoReView)
+    RecyclerView mReView;
+
+    private RepoListAdapter mRepoListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +71,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     private void initUI() {
         ButterKnife.bind(this);
+        mOwnerEt.setText("RustFisher");
+        mRepoEt.setText("GithubOnAndroid");
 
-        mOwnerEt.setText("square");
-        mRepoEt.setText("retrofit");
+        mRepoListAdapter = new RepoListAdapter();
+        ViewStore.decorateRecyclerView(getApplicationContext(), mReView);
+        mRepoListAdapter.setOnItemClickListener(new RepoListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                UserRepo userRepo = mRepoListAdapter.getRepoItem(position).getUserRepo();
+                Intent intent = new Intent(getApplicationContext(), RepoActivity.class);
+                intent.putExtra(NetworkCenter.K_OWNER, userRepo.getOwner().getLogin());
+                intent.putExtra(NetworkCenter.K_REPO_NAME, userRepo.getName());
+                intent.putExtra(NetworkCenter.K_REPO_FULL_NAME, userRepo.getFull_name());
+                intent.putExtra(NetworkCenter.K_REPO_IS_FORK_FROM, userRepo.isFork());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+        mReView.setAdapter(mRepoListAdapter);
     }
 
     private void initUtils() {
@@ -79,10 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(getApplicationContext(), "Info error! Please check owner name", Toast.LENGTH_SHORT).show();
             return;
         }
-        NetworkCenter.getAllRepoObs(owner)
+        NetworkCenter.getUserRepoObs(owner)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<Repo>>() {
+                .subscribe(new Subscriber<ArrayList<UserRepo>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "Get repo onCompleted");
@@ -94,8 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     @Override
-                    public void onNext(ArrayList<Repo> repos) {
-                        Log.d(TAG, "repos size: " + repos.size());
+                    public void onNext(ArrayList<UserRepo> userRepos) {
+                        mRepoListAdapter.updateList(UserRepoInfo.packUserRepo(userRepos));
+                        mRepoListAdapter.notifyDataSetChanged();
                     }
 
                 });
@@ -113,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         observable1.subscribeOn(Schedulers.newThread())
                 .doOnNext(new Action1<ArrayList<GitHubContributor>>() {
                     @Override
-                    public void call(ArrayList<GitHubContributor> forks) {
-                        Log.d(TAG, "forks " + forks.size());
+                    public void call(ArrayList<GitHubContributor> mans) {
+                        Log.d(TAG, "mans " + mans.size());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -143,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 });
-
 
     }
 }

@@ -1,5 +1,6 @@
 package com.rustfisher.githubonandroid.widget;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,16 @@ public final class ViewStore {
         dividerLine.setSize(2);
         dividerLine.setColor(Color.TRANSPARENT);
         recyclerView.addItemDecoration(dividerLine);
+    }
+
+    /**
+     * @param context Need Activity instance
+     */
+    public static ProgressDialog getProgressDialog1(Context context) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("loading");
+        progressDialog.setCancelable(true);
+        return progressDialog;
     }
 
 }

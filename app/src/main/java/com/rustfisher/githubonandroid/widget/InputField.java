@@ -50,6 +50,10 @@ public class InputField extends RelativeLayout {
         return middleEt.getText().toString();
     }
 
+    public void clearEtFocus() {
+        middleEt.clearFocus();
+    }
+
     public TextView getLeftTv() {
         return leftTv;
     }

@@ -9,94 +9,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.rustfisher.githubonandroid.activity.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/reLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <com.rustfisher.githubonandroid.widget.InputField
+        android:id="@+id/inputField1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/ownerTv"
-            style="@style/textStyle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Owner:" />
-
-        <EditText
-            android:id="@+id/ownerEt"
-            style="@style/textStyle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/ownerTv"
-            android:hint="@string/owner"
-            android:inputType="text"
-            android:minWidth="60dp"
-            android:textColorHint="@color/colorText3" />
-
-        <TextView
-            android:id="@+id/repoTv"
-            style="@style/textStyle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/ownerEt"
-            android:text="Repo:" />
-
-        <EditText
-            android:id="@+id/repoEt"
-            style="@style/textStyle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_toEndOf="@id/repoTv"
-            android:hint="@string/repo"
-            android:minWidth="80dp"
-            android:textColorHint="@color/colorText3" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/linLayout1"
-        android:layout_width="match_parent"
+    <com.rustfisher.githubonandroid.widget.InputField
+        android:id="@+id/inputField2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reLayout1"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/loadBt1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="49"
-            android:background="@drawable/se_btn_bg"
-            android:text="@string/load_info"
-            android:textSize="@dimen/text_size_1" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/loadRepoBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="49"
-            android:background="@drawable/se_btn_bg"
-            android:text="@string/load_repos"
-            android:textSize="@dimen/text_size_1" />
-    </LinearLayout>
+        android:layout_below="@id/inputField1" />
 
     <TextView
         android:id="@+id/infoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linLayout1" />
+        android:layout_below="@id/inputField2" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/infoReView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linLayout1"
+        android:layout_below="@id/inputField2"
         android:layout_marginTop="12dp" />
 
 

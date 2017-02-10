@@ -19,10 +19,8 @@ import rx.Observable;
  * Created by Rust Fisher on 2017/2/6.
  */
 public class NetworkCenter {
-    public static final String K_REPO_FULL_NAME = "repo_full_name";
     public static final String K_REPO_NAME = "repo_name";
     public static final String K_OWNER = "owner";
-    public static final String K_REPO_IS_FORK_FROM = "repo_is_fork_from"; // fork from other
 
     public static final String GITHUB_BASE_URL = "https://api.github.com/";
     public static final String GITHUB_CONTRIBUTORS_URL = "repos/{owner}/{repo}/contributors";

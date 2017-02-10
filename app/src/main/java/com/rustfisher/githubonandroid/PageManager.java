@@ -9,6 +9,10 @@ public class PageManager {
 
     private static ArrayList<Activity> repoActList = new ArrayList<>();
 
+    public static int getRepoActListSize() {
+        return repoActList.size();
+    }
+
     public static boolean addRepoActivity(Activity activity) {
         return repoActList.add(activity);
     }
@@ -21,6 +25,7 @@ public class PageManager {
         for (Activity activity : repoActList) {
             activity.finish();
         }
+        repoActList.clear();
     }
 
 }

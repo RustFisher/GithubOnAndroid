@@ -72,6 +72,9 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.repoOwnerTv:
+                Intent mainIntent = new Intent(NetworkCenter.K_OWNER);
+                mainIntent.putExtra(NetworkCenter.K_OWNER, mRepoOwnerTv.getText());
+                sendBroadcast(mainIntent);
                 PageManager.finishRepoAct();
                 break;
             case R.id.forkInfoTv:

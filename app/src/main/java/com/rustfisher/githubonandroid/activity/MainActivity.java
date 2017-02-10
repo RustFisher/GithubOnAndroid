@@ -2,8 +2,10 @@ package com.rustfisher.githubonandroid.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -63,9 +65,16 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "Main act, repo act list size == " + PageManager.getRepoActListSize());
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         PageManager.finishRepoAct();
+        unregisterReceiver(mBroadcastReceiver);
         mProgressDialog.dismiss();
         mProgressDialog = null;
     }
@@ -131,6 +140,7 @@ public class MainActivity extends Activity {
     }
 
     private void initUtils() {
+        registerReceiver(mBroadcastReceiver, makeIFilter());
         loadOwnerRepos(mOwnerInputField.getEtText());
     }
 
@@ -150,7 +160,7 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    private void loadOwnerRepos(String owner) {
+    private void loadOwnerRepos(final String owner) {
         if (TextUtils.isEmpty(owner)) {
             Toast.makeText(getApplicationContext(), "Info error! Please check owner name", Toast.LENGTH_SHORT).show();
             return;
@@ -163,7 +173,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void call(Object o) {
                         Log.d(TAG, "on next " + mOwnerInputField.getEtText());
-                        mCollapsingToolbarLayout.setTitle(mOwnerInputField.getEtText());
+                        mOwnerInputField.setEtText(owner);
+                        mCollapsingToolbarLayout.setTitle(owner);
                     }
                 })
                 .subscribe(new Subscriber<ArrayList<UserRepo>>() {
@@ -187,6 +198,24 @@ public class MainActivity extends Activity {
                     }
 
                 });
+    }
+
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case NetworkCenter.K_OWNER:
+                    loadOwnerRepos(intent.getStringExtra(NetworkCenter.K_OWNER));
+                    break;
+            }
+        }
+    };
+
+
+    private IntentFilter makeIFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(NetworkCenter.K_OWNER);
+        return intentFilter;
     }
 
     private void hideSoftKeyboard() {

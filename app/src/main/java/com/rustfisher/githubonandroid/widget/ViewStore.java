@@ -1,5 +1,6 @@
 package com.rustfisher.githubonandroid.widget;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -27,7 +28,7 @@ public final class ViewStore {
     /**
      * @param context Need Activity instance
      */
-    public static ProgressDialog getProgressDialog1(Context context) {
+    public static ProgressDialog getProgressDialog1(Activity context) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("loading");
         progressDialog.setCancelable(true);

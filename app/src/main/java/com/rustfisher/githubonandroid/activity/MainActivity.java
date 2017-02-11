@@ -206,6 +206,7 @@ public class MainActivity extends Activity {
             switch (intent.getAction()) {
                 case NetworkCenter.K_OWNER:
                     loadOwnerRepos(intent.getStringExtra(NetworkCenter.K_OWNER));
+                    mRepoInputField.setEtText("");
                     break;
             }
         }

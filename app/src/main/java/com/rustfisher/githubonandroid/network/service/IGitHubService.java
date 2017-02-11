@@ -10,6 +10,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface IGitHubService {
@@ -25,7 +26,8 @@ public interface IGitHubService {
 
     @GET(NetworkCenter.GITHUB_USER_REPO_URL)
     Observable<List<UserRepo>> userRepo(
-            @Path("owner") String owner);
+            @Path("owner") String owner,
+            @Query("sort") String sortType);
 
     @GET(NetworkCenter.GITHUB_REPO_URL)
     Observable<Repo> repo(

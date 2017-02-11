@@ -1,7 +1,6 @@
 package com.rustfisher.githubonandroid.activity;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -108,7 +107,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList(HistoryDialogFragment.K_HISTORY_LIST, PageManager.getOwnerHistoryTextList());
+                bundle.putStringArrayList(HistoryDialogFragment.K_HISTORY_LIST, PageManager.getOwnerHistoryTextListCp());
                 mHistoryDialogFragment.setArguments(bundle);
                 mHistoryDialogFragment.show(getFragmentManager(), "a");
             }

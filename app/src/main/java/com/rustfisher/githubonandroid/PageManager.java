@@ -10,8 +10,8 @@ public class PageManager {
     private static ArrayList<Activity> repoActList = new ArrayList<>();
     private static ArrayList<String> ownerHistoryTextList = new ArrayList<>();
 
-    public static ArrayList<String> getOwnerHistoryTextList() {
-        return ownerHistoryTextList;
+    public static ArrayList<String> getOwnerHistoryTextListCp() {
+        return new ArrayList<>(ownerHistoryTextList);
     }
 
     public static void setOwnerHistoryTextList(ArrayList<String> ownerHistoryTextList) {

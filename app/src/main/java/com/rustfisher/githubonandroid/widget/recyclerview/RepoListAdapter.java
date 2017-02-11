@@ -11,7 +11,6 @@ import com.rustfisher.githubonandroid.R;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
 import com.rustfisher.githubonandroid.widget.UserRepoInfo;
 
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -88,7 +87,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         }
 
         holder.languageTv.setText(userRepo.getLanguage());
-        holder.repoItemUpdatedTv.setText(String.format(Locale.ENGLISH, "Updated: %s", userRepo.getUpdated_at()));
+        holder.repoItemUpdatedTv.setText(String.format(Locale.ENGLISH, "Last push: %s", userRepo.getPushed_at()));
 
         int starCount = userRepo.getStargazers_count();
         if (starCount > 0) {

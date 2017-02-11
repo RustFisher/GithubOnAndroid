@@ -57,8 +57,9 @@ public class NetworkCenter {
         return getGithubRetrofit().create(IGitHubService.class).rxContributors(owner, repo);
     }
 
+    // Get repos by owner name
     public static Observable getUserRepoObs(String owner) {
-        return getGithubRetrofit().create(IGitHubService.class).userRepo(owner);
+        return getGithubRetrofit().create(IGitHubService.class).userRepo(owner, "pushed");
     }
 
     // Get repo by repo full name

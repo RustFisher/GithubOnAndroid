@@ -1,6 +1,7 @@
 package com.rustfisher.githubonandroid.activity;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -22,6 +24,7 @@ import com.rustfisher.githubonandroid.PageManager;
 import com.rustfisher.githubonandroid.R;
 import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
+import com.rustfisher.githubonandroid.widget.HistoryDialogFragment;
 import com.rustfisher.githubonandroid.widget.InputField;
 import com.rustfisher.githubonandroid.widget.UserRepoInfo;
 import com.rustfisher.githubonandroid.widget.ViewStore;
@@ -55,6 +58,7 @@ public class MainActivity extends Activity {
 
     private ProgressDialog mProgressDialog;
     private RepoListAdapter mRepoListAdapter;
+    HistoryDialogFragment mHistoryDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,7 @@ public class MainActivity extends Activity {
     private void initUI() {
         ButterKnife.bind(this);
         mProgressDialog = ViewStore.getProgressDialog1(this);
+        mHistoryDialogFragment = new HistoryDialogFragment();
         mRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +95,8 @@ public class MainActivity extends Activity {
         });
 
         mOwnerInputField.setEtText("RustFisher");
-        mOwnerInputField.setText("Owner:", getText(R.string.owner), getText(R.string.load_repos));
-        mOwnerInputField.setRightBtnOnclickListener(new View.OnClickListener() {
+        mOwnerInputField.setText("Owner:", getText(R.string.owner));
+        mOwnerInputField.setFarRightOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard();
@@ -99,10 +104,21 @@ public class MainActivity extends Activity {
                 loadOwnerRepos(mOwnerInputField.getEtText());
             }
         });
+        mOwnerInputField.setRightOnclickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList(HistoryDialogFragment.K_HISTORY_LIST, PageManager.getOwnerHistoryTextList());
+                mHistoryDialogFragment.setArguments(bundle);
+                mHistoryDialogFragment.show(getFragmentManager(), "a");
+            }
+        });
+        mOwnerInputField.setFarRightDrawable(ContextCompat.getDrawable(getApplication(), R.mipmap.ic_refresh));
+        mOwnerInputField.setRightIvDrawable(ContextCompat.getDrawable(getApplication(), R.mipmap.ic_history));
 
         mRepoInputField.setEtText("GithubOnAndroid");
-        mRepoInputField.setText("Repo:", getText(R.string.repo), getText(R.string.load_repo_info));
-        mRepoInputField.setRightBtnOnclickListener(new View.OnClickListener() {
+        mRepoInputField.setText("Repo:", getText(R.string.repo));
+        mRepoInputField.setFarRightOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard();
@@ -141,7 +157,7 @@ public class MainActivity extends Activity {
 
     private void initUtils() {
         registerReceiver(mBroadcastReceiver, makeIFilter());
-        loadOwnerRepos(mOwnerInputField.getEtText());
+//        loadOwnerRepos(mOwnerInputField.getEtText());
     }
 
     private void clearEtFocus() {

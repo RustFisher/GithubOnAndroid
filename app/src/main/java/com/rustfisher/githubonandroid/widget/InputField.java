@@ -1,10 +1,12 @@
 package com.rustfisher.githubonandroid.widget;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,7 +17,8 @@ public class InputField extends RelativeLayout {
     private RelativeLayout reLayout;
     private TextView leftTv;
     private EditText middleEt;
-    private Button rightBtn;
+    private ImageView farRightIv;
+    private ImageView rightIv;
 
     public InputField(Context context) {
         this(context, null);
@@ -29,17 +32,31 @@ public class InputField extends RelativeLayout {
         }
         leftTv = (TextView) reLayout.findViewById(R.id.leftTv);
         middleEt = (EditText) reLayout.findViewById(R.id.middleEt);
-        rightBtn = (Button) reLayout.findViewById(R.id.rightBtn);
+        farRightIv = (ImageView) reLayout.findViewById(R.id.farRightIv);
+        rightIv = (ImageView) reLayout.findViewById(R.id.rightIv);
     }
 
-    public void setText(CharSequence leftText, CharSequence etHint, CharSequence btnText) {
+    public void setRightIvDrawable(Drawable drawable) {
+        rightIv.setImageDrawable(drawable);
+        rightIv.setVisibility(VISIBLE);
+    }
+
+    public void setFarRightDrawable(Drawable drawable) {
+        farRightIv.setImageDrawable(drawable);
+        farRightIv.setVisibility(VISIBLE);
+    }
+
+    public void setText(CharSequence leftText, CharSequence etHint) {
         leftTv.setText(leftText);
         middleEt.setHint(etHint);
-        rightBtn.setText(btnText);
     }
 
-    public void setRightBtnOnclickListener(OnClickListener listener) {
-        rightBtn.setOnClickListener(listener);
+    public void setRightOnclickListener(OnClickListener listener) {
+        rightIv.setOnClickListener(listener);
+    }
+
+    public void setFarRightOnclickListener(OnClickListener listener) {
+        farRightIv.setOnClickListener(listener);
     }
 
     public void setEtText(CharSequence etText) {
@@ -62,7 +79,7 @@ public class InputField extends RelativeLayout {
         return middleEt;
     }
 
-    public Button getRightBtn() {
-        return rightBtn;
+    public ImageView getRightBtn() {
+        return farRightIv;
     }
 }

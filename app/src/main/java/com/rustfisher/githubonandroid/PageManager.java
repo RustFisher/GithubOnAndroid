@@ -8,6 +8,15 @@ import java.util.ArrayList;
 public class PageManager {
 
     private static ArrayList<Activity> repoActList = new ArrayList<>();
+    private static ArrayList<String> ownerHistoryTextList = new ArrayList<>();
+
+    public static ArrayList<String> getOwnerHistoryTextList() {
+        return ownerHistoryTextList;
+    }
+
+    public static void setOwnerHistoryTextList(ArrayList<String> ownerHistoryTextList) {
+        PageManager.ownerHistoryTextList = ownerHistoryTextList;
+    }
 
     public static int getRepoActListSize() {
         return repoActList.size();

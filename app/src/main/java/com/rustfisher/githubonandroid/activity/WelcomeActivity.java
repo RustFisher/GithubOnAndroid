@@ -7,25 +7,56 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
 
+import com.rustfisher.githubonandroid.PageManager;
 import com.rustfisher.githubonandroid.R;
 
-public class WelcomeActivity extends Activity {
+import java.util.ArrayList;
 
-    Handler mHandler = new Handler();
+public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_welcome);
-
         initUI();
-        mHandler.postDelayed(new Runnable() {
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        new Thread() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                super.run();
+                checkDatabase();
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
+                    }
+                });
             }
-        }, 500);
+        }.start();
+    }
+
+    private void checkDatabase() {
+        ArrayList<String> ownerHistoryTextList = new ArrayList<>();
+        // fixme: use SQLite
+        ownerHistoryTextList.add("Google");
+        ownerHistoryTextList.add("Facebook");
+        ownerHistoryTextList.add("Microsoft");
+        ownerHistoryTextList.add("Bilibili");
+        ownerHistoryTextList.add("RustFisher");
+        PageManager.setOwnerHistoryTextList(ownerHistoryTextList);
     }
 
     private void initUI() {
@@ -38,7 +69,5 @@ public class WelcomeActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
-        mHandler = null;
     }
 }

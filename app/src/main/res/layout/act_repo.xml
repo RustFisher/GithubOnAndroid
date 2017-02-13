@@ -17,10 +17,20 @@
         android:paddingStart="12dp"
         android:paddingTop="12dp">
 
+        <ImageView
+            android:id="@+id/repoTypeIv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="2dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_fork" />
+
         <TextView
             android:id="@+id/repoOwnerTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/repoTypeIv"
             android:background="@drawable/se_btn_bg"
             android:text="@string/owner"
             android:textColor="@color/colorText2"
@@ -49,14 +59,48 @@
             android:textColor="@color/colorText4"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/forkInfoTv"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/repoNameTv"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/se_btn_bg"
-            android:textColor="@color/colorText2"
-            android:textSize="@dimen/text_size_3" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/forkInfoTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/se_btn_bg"
+                android:textColor="@color/colorText2"
+                android:textSize="@dimen/text_size_3" />
+
+            <TextView
+                android:id="@+id/descriptionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/colorText4"
+                android:textSize="@dimen/text_size_3" />
+
+            <TextView
+                android:id="@+id/lastPushTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/colorText4"
+                android:textSize="@dimen/text_size_3" />
+
+        </LinearLayout>
+
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/errorTv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/repoToolbar"
+        android:background="@color/colorBg7"
+        android:gravity="center"
+        android:textSize="26sp"
+        android:visibility="gone" />
 </RelativeLayout>

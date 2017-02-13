@@ -28,7 +28,7 @@ public final class ViewStore {
     /**
      * @param context Need Activity instance
      */
-    public static ProgressDialog getProgressDialog1(Activity context) {
+    public static ProgressDialog getLoadingProgressDialog(Activity context) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("loading");
         progressDialog.setCancelable(true);

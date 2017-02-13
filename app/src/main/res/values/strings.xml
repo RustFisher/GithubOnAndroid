@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">GithubInfo</string>
+    <string name="app_name">GithubViewer</string>
 
+    <string name="avatar">avatar</string>
     <string name="owner">owner</string>
     <string name="repo">repo</string>
     <string name="load_repo_info">Load repo info</string>

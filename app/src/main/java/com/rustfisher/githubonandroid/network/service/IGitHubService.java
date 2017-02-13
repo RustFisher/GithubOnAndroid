@@ -3,6 +3,7 @@ package com.rustfisher.githubonandroid.network.service;
 import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.GitHubContributor;
 import com.rustfisher.githubonandroid.network.bean.Repo;
+import com.rustfisher.githubonandroid.network.bean.UserInfo;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
 
 import java.util.List;
@@ -33,5 +34,9 @@ public interface IGitHubService {
     Observable<Repo> repo(
             @Path("owner") String owner,
             @Path("repo") String repo);
+
+    // Get user information
+    @GET(NetworkCenter.GITHUB_USER_INFO_URL)
+    Observable<UserInfo> userInfo(@Path("username") String username);
 
 }

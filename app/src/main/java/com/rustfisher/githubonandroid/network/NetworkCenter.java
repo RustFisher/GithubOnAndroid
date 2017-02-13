@@ -26,6 +26,7 @@ public class NetworkCenter {
     public static final String GITHUB_CONTRIBUTORS_URL = "repos/{owner}/{repo}/contributors";
     public static final String GITHUB_REPO_URL = "repos/{owner}/{repo}";
     public static final String GITHUB_USER_REPO_URL = "users/{owner}/repos";
+    public static final String GITHUB_USER_INFO_URL = "users/{username}";
 
     private static OkHttpClient githubOKClient = new OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
@@ -65,5 +66,9 @@ public class NetworkCenter {
     // Get repo by repo full name
     public static Observable getRepoDetailObs(String owner, String repo) {
         return getGithubRetrofit().create(IGitHubService.class).repo(owner, repo);
+    }
+
+    public static Observable getUserInformationObs(String username) {
+        return getGithubRetrofit().create(IGitHubService.class).userInfo(username);
     }
 }

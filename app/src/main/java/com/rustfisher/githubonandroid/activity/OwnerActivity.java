@@ -17,11 +17,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.rustfisher.githubonandroid.PageManager;
 import com.rustfisher.githubonandroid.R;
 import com.rustfisher.githubonandroid.network.NetworkCenter;
+import com.rustfisher.githubonandroid.network.bean.UserInfo;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
 import com.rustfisher.githubonandroid.widget.HistoryDialogFragment;
 import com.rustfisher.githubonandroid.widget.InputField;
@@ -38,22 +43,34 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends Activity {
+public class OwnerActivity extends Activity {
 
     private static final String TAG = "rustApp";
 
-    @BindView(R.id.act_main)
+    @BindView(R.id.act_root)
     CoordinatorLayout mRoot;
     @BindView(R.id.infoReView)
     RecyclerView mReView;
     @BindView(R.id.inputField1)
     InputField mOwnerInputField;
-    @BindView(R.id.inputField2)
-    InputField mRepoInputField;
-    @BindView(R.id.collapsing_toolbar_layout)
+    @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @BindView(R.id.mainToolbar)
+    @BindView(R.id.ownerToolbar)
     Toolbar mToolbar;
+    @BindView(R.id.contentReLayout)
+    RelativeLayout mContentReLayout;
+    @BindView(R.id.bioTv)
+    TextView mBioTv;
+    @BindView(R.id.avatarIv)
+    ImageView mAvatarIv;
+    @BindView(R.id.locationTv)
+    TextView mLocationTv;
+    @BindView(R.id.emailTv)
+    TextView mEmailTv;
+    @BindView(R.id.locationField)
+    RelativeLayout mLocationField;
+    @BindView(R.id.emailField)
+    RelativeLayout mEmailField;
 
     private ProgressDialog mProgressDialog;
     private RepoListAdapter mRepoListAdapter;
@@ -62,7 +79,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_main);
+        setContentView(R.layout.act_owner);
         initUI();
         initUtils();
     }
@@ -84,7 +101,7 @@ public class MainActivity extends Activity {
 
     private void initUI() {
         ButterKnife.bind(this);
-        mProgressDialog = ViewStore.getProgressDialog1(this);
+        mProgressDialog = ViewStore.getLoadingProgressDialog(this);
         mHistoryDialogFragment = new HistoryDialogFragment();
         mRoot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +110,8 @@ public class MainActivity extends Activity {
             }
         });
 
-        mOwnerInputField.setEtText("RustFisher");
-        mOwnerInputField.setText("Owner:", getText(R.string.owner));
+        mOwnerInputField.setEtText(PageManager.getLastUserName());
+        mOwnerInputField.setText("Owner ", getText(R.string.owner));
         mOwnerInputField.setFarRightOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,17 +131,6 @@ public class MainActivity extends Activity {
         });
         mOwnerInputField.setFarRightDrawable(ContextCompat.getDrawable(getApplication(), R.mipmap.ic_refresh));
         mOwnerInputField.setRightIvDrawable(ContextCompat.getDrawable(getApplication(), R.mipmap.ic_history));
-
-        mRepoInputField.setEtText("GithubOnAndroid");
-        mRepoInputField.setText("Repo:", getText(R.string.repo));
-        mRepoInputField.setFarRightOnclickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideSoftKeyboard();
-                clearEtFocus();
-                goToRepoPage(mOwnerInputField.getEtText().trim(), mRepoInputField.getEtText().trim());
-            }
-        });
 
         mRepoListAdapter = new RepoListAdapter();
         ViewStore.decorateRecyclerView(getApplicationContext(), mReView);
@@ -152,15 +158,15 @@ public class MainActivity extends Activity {
                 finish();
             }
         });
+        hideOwnerField();
     }
 
     private void initUtils() {
         registerReceiver(mBroadcastReceiver, makeIFilter());
-//        loadOwnerRepos(mOwnerInputField.getEtText());
+        loadOwnerInfoAndRepo(mOwnerInputField.getEtText());
     }
 
     private void clearEtFocus() {
-        mRepoInputField.clearEtFocus();
         mOwnerInputField.clearEtFocus();
     }
 
@@ -173,6 +179,62 @@ public class MainActivity extends Activity {
         intent.putExtra(NetworkCenter.K_OWNER, owner);
         intent.putExtra(NetworkCenter.K_REPO_NAME, repo);
         startActivity(intent);
+    }
+
+    private void loadOwnerInformation(final String userName) {
+        if (TextUtils.isEmpty(userName)) {
+            return;
+        }
+        hideOwnerField();
+        NetworkCenter.getUserInformationObs(userName)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<UserInfo>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "getUserInformation onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "getUserInformation onError", e);
+                    }
+
+                    @Override
+                    public void onNext(UserInfo userInfo) {
+                        loadUserInfoUI(userInfo);
+                    }
+                });
+
+    }
+
+    private void hideOwnerField() {
+        mBioTv.setVisibility(View.GONE);
+        mLocationField.setVisibility(View.GONE);
+        mEmailField.setVisibility(View.GONE);
+    }
+
+    private void loadUserInfoUI(UserInfo userInfo) {
+        Glide.with(OwnerActivity.this).load(userInfo.getAvatar_url()).into(mAvatarIv);
+        mOwnerInputField.setEtText(userInfo.getLogin());
+        if (!TextUtils.isEmpty(userInfo.getBio())) {
+            mBioTv.setVisibility(View.VISIBLE);
+            mBioTv.setText(userInfo.getBio());
+        } else {
+            mBioTv.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(userInfo.getEmail())) {
+            mEmailField.setVisibility(View.VISIBLE);
+            mEmailTv.setText(userInfo.getEmail());
+        } else {
+            mEmailField.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(userInfo.getLocation())) {
+            mLocationTv.setText(userInfo.getLocation());
+            mLocationField.setVisibility(View.VISIBLE);
+        } else {
+            mLocationField.setVisibility(View.GONE);
+        }
     }
 
     private void loadOwnerRepos(final String owner) {
@@ -188,8 +250,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void call(Object o) {
                         Log.d(TAG, "on next " + mOwnerInputField.getEtText());
-                        mOwnerInputField.setEtText(owner);
                         mCollapsingToolbarLayout.setTitle(owner);
+                        PageManager.saveUserName(owner);
                     }
                 })
                 .subscribe(new Subscriber<ArrayList<UserRepo>>() {
@@ -202,7 +264,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onError(Throwable e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Get repos onError:" + e.getMessage(), e);
                     }
 
@@ -220,13 +282,17 @@ public class MainActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case NetworkCenter.K_OWNER:
-                    loadOwnerRepos(intent.getStringExtra(NetworkCenter.K_OWNER));
-                    mRepoInputField.setEtText("");
+                    String owner = intent.getStringExtra(NetworkCenter.K_OWNER);
+                    loadOwnerInfoAndRepo(owner);
                     break;
             }
         }
     };
 
+    private void loadOwnerInfoAndRepo(String owner) {
+        loadOwnerInformation(owner);
+        loadOwnerRepos(owner);
+    }
 
     private IntentFilter makeIFilter() {
         IntentFilter intentFilter = new IntentFilter();

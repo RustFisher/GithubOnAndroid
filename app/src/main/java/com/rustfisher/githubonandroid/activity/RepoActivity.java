@@ -4,11 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rustfisher.githubonandroid.PageManager;
@@ -26,6 +29,9 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * show specific repo
+ */
 public class RepoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "rustApp";
@@ -38,6 +44,14 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
     TextView mForkInfoTv;
     @BindView(R.id.repoToolbar)
     Toolbar mToolbar;
+    @BindView(R.id.errorTv)
+    TextView mErrorTv;
+    @BindView(R.id.repoTypeIv)
+    ImageView mRepoTypeIv;
+    @BindView(R.id.descriptionTv)
+    TextView mDescriptionTv;
+    @BindView(R.id.lastPushTv)
+    TextView mLastPushTv;
 
     private ProgressDialog mProgressDialog;
     private String mRepoName;
@@ -67,7 +81,7 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
         PageManager.removeRepoAct(this);
     }
 
-    @OnClick({R.id.repoOwnerTv, R.id.forkInfoTv})
+    @OnClick({R.id.repoOwnerTv, R.id.forkInfoTv, R.id.errorTv})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -82,6 +96,9 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra(NetworkCenter.K_OWNER, mParentBean.getOwner().getLogin());
                 intent.putExtra(NetworkCenter.K_REPO_NAME, mParentBean.getName());
                 startActivity(intent);
+                break;
+            case R.id.errorTv:
+                downloadRepoInfo(mOwnerName, mRepoName);
                 break;
         }
     }
@@ -99,7 +116,7 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
     private void initUI() {
         ButterKnife.bind(this);
 
-        mProgressDialog = ViewStore.getProgressDialog1(this);
+        mProgressDialog = ViewStore.getLoadingProgressDialog(this);
 
         mToolbar.setTitle(mOwnerName);
         mToolbar.setSubtitle(mRepoName);
@@ -124,6 +141,8 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void downloadRepoInfo(String owner, String repo) {
+        mErrorTv.setVisibility(View.GONE);
+        mErrorTv.setText("");
         mProgressDialog.show();
         NetworkCenter.getRepoDetailObs(owner, repo)
                 .subscribeOn(Schedulers.newThread())
@@ -137,6 +156,8 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onError(Throwable e) {
                         mProgressDialog.dismiss();
+                        mErrorTv.setVisibility(View.VISIBLE);
+                        mErrorTv.append(e.getMessage());
                         Log.e(TAG, "RepoActivity onError", e);
                     }
 
@@ -155,12 +176,21 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
         mRepoOwnerTv.setText(repo.getOwner().getLogin());
         mToolbar.setTitle(repo.getOwner().getLogin());
         mToolbar.setSubtitle(repo.getName());
+        mLastPushTv.setText(repo.getPushed_at());
         if (repo.isFork()) {
+            mRepoTypeIv.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_fork));
             mForkInfoTv.setVisibility(View.VISIBLE);
             mForkInfoTv.setText(String.format(Locale.ENGLISH, "Fork from %s", mParentBean.getFull_name()));
         } else {
-            mForkInfoTv.setVisibility(View.INVISIBLE);
+            mRepoTypeIv.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_source_code));
+            mForkInfoTv.setVisibility(View.GONE);
         }
+        if (!TextUtils.isEmpty(repo.getDescription())) {
+            mDescriptionTv.setText(repo.getDescription());
+        }
+        repo.getStargazers_count();
+        repo.getWatchers_count();
+        repo.getForks_count();
     }
 
 }

@@ -22,6 +22,16 @@ public class PageManager {
         PageManager.ownerHistoryTextList = ownerHistoryTextList;
     }
 
+    // Lower case
+    public static boolean hasHistory(String ownerName) {
+        for (String name : ownerHistoryTextList) {
+            if (name.toLowerCase().equals(ownerName.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static int getRepoActListSize() {
         return repoActList.size();
     }

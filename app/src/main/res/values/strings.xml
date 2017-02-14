@@ -4,8 +4,6 @@
     <string name="avatar">avatar</string>
     <string name="owner">owner</string>
     <string name="repo">repo</string>
-    <string name="load_repo_info">Load repo info</string>
-    <string name="load_repos">Load user repos</string>
     <string name="welcome_note_1">Welcome!</string>
     <string name="author_text">by Rust Fisher</string>
 </resources>

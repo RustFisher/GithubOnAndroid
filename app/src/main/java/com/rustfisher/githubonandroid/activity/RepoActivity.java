@@ -52,6 +52,12 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
     TextView mDescriptionTv;
     @BindView(R.id.lastPushTv)
     TextView mLastPushTv;
+    @BindView(R.id.starCountTv)
+    TextView mStarCountTv;
+    @BindView(R.id.watcherCountTv)
+    TextView mWatcherCountTv;
+    @BindView(R.id.forkCountTv)
+    TextView mForkCountTv;
 
     private ProgressDialog mProgressDialog;
     private String mRepoName;
@@ -188,9 +194,10 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
         if (!TextUtils.isEmpty(repo.getDescription())) {
             mDescriptionTv.setText(repo.getDescription());
         }
-        repo.getStargazers_count();
-        repo.getWatchers_count();
-        repo.getForks_count();
+        mStarCountTv.setText(String.format(Locale.ENGLISH, "%d", repo.getStargazers_count()));
+        mWatcherCountTv.setText(String.format(Locale.ENGLISH, "%d", repo.getWatchers_count()));
+        mForkCountTv.setText(String.format(Locale.ENGLISH, "%d", repo.getForks_count()));
+
     }
 
 }

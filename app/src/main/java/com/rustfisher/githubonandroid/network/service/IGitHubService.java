@@ -1,6 +1,5 @@
 package com.rustfisher.githubonandroid.network.service;
 
-import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.GitHubContributor;
 import com.rustfisher.githubonandroid.network.bean.Repo;
 import com.rustfisher.githubonandroid.network.bean.UserInfo;
@@ -15,28 +14,28 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 public interface IGitHubService {
-    @GET(NetworkCenter.GITHUB_CONTRIBUTORS_URL)
+    @GET("repos/{owner}/{repo}/contributors")
     Call<List<GitHubContributor>> contributors(
             @Path("owner") String owner,
             @Path("repo") String repo);
 
-    @GET(NetworkCenter.GITHUB_CONTRIBUTORS_URL)
+    @GET("repos/{owner}/{repo}/contributors")
     Observable<List<GitHubContributor>> rxContributors(
             @Path("owner") String owner,
             @Path("repo") String repo);
 
-    @GET(NetworkCenter.GITHUB_USER_REPO_URL)
+    @GET("users/{owner}/repos")
     Observable<List<UserRepo>> userRepo(
             @Path("owner") String owner,
             @Query("sort") String sortType);
 
-    @GET(NetworkCenter.GITHUB_REPO_URL)
+    @GET("repos/{owner}/{repo}")
     Observable<Repo> repo(
             @Path("owner") String owner,
             @Path("repo") String repo);
 
     // Get user information
-    @GET(NetworkCenter.GITHUB_USER_INFO_URL)
+    @GET("users/{username}")
     Observable<UserInfo> userInfo(@Path("username") String username);
 
 }

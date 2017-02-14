@@ -23,10 +23,6 @@ public class NetworkCenter {
     public static final String K_OWNER = "owner";
 
     public static final String GITHUB_BASE_URL = "https://api.github.com/";
-    public static final String GITHUB_CONTRIBUTORS_URL = "repos/{owner}/{repo}/contributors";
-    public static final String GITHUB_REPO_URL = "repos/{owner}/{repo}";
-    public static final String GITHUB_USER_REPO_URL = "users/{owner}/repos";
-    public static final String GITHUB_USER_INFO_URL = "users/{username}";
 
     private static OkHttpClient githubOKClient = new OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)

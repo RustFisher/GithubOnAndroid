@@ -5,17 +5,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.rustfisher.githubonandroid.GApp;
 import com.rustfisher.githubonandroid.PageManager;
 import com.rustfisher.githubonandroid.R;
+import com.rustfisher.githubonandroid.db.DBManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class WelcomeActivity extends Activity {
+    private static final String TAG = "rustApp";
 
     TextView mVersionTv;
 
@@ -58,14 +62,19 @@ public class WelcomeActivity extends Activity {
     };
 
     private void checkDatabase() {
-        ArrayList<String> ownerHistoryTextList = new ArrayList<>();
-        // fixme: use SQLite
-        ownerHistoryTextList.add("Google");
-        ownerHistoryTextList.add("Facebook");
-        ownerHistoryTextList.add("Microsoft");
-        ownerHistoryTextList.add("Bilibili");
-        ownerHistoryTextList.add("RustFisher");
-        PageManager.setOwnerHistoryTextList(ownerHistoryTextList);
+        ArrayList<DBManager.OwnerEntity> historyList = DBManager.getManager().queryAllHistory();
+        if (historyList.size() == 0) {
+            DBManager.getManager().insertOneRecord("Facebook");
+            DBManager.getManager().insertOneRecord("Google");
+            DBManager.getManager().insertOneRecord("Microsoft");
+            DBManager.getManager().insertOneRecord("Bilibili");
+            DBManager.getManager().insertOneRecord("RustFisher");
+        }
+        PageManager.setOwnerHistoryTextList(DBManager.getManager().queryHistoryStr());
+        List<DBManager.OwnerEntity> list = DBManager.getManager().queryAllHistory();
+        for (DBManager.OwnerEntity entity : list) {
+            Log.d(TAG, entity.toString());
+        }
     }
 
     private void initUI() {

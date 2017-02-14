@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.rustfisher.githubonandroid.PageManager;
 import com.rustfisher.githubonandroid.R;
+import com.rustfisher.githubonandroid.db.DBManager;
 import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.UserInfo;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
@@ -117,7 +118,7 @@ public class OwnerActivity extends Activity {
             public void onClick(View v) {
                 hideSoftKeyboard();
                 clearEtFocus();
-                loadOwnerRepos(mOwnerInputField.getEtText());
+                loadOwnerInfoAndRepo(mOwnerInputField.getEtText());
             }
         });
         mOwnerInputField.setRightOnclickListener(new View.OnClickListener() {
@@ -188,6 +189,15 @@ public class OwnerActivity extends Activity {
         hideOwnerField();
         NetworkCenter.getUserInformationObs(userName)
                 .subscribeOn(Schedulers.newThread())
+                .doOnNext(new Action1<UserInfo>() {
+                    @Override
+                    public void call(UserInfo userInfo) {
+                        if (!PageManager.hasHistory(userInfo.getLogin())) {
+                            DBManager.getManager().insertOneRecord(userInfo.getLogin());
+                            PageManager.setOwnerHistoryTextList(DBManager.getManager().queryHistoryStr());
+                        }
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<UserInfo>() {
                     @Override

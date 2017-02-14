@@ -11,20 +11,16 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="textStyle1">
-        <item name="android:textSize">@dimen/text_size_4</item>
-        <item name="android:textColor">@color/colorText4</item>
-    </style>
-
-    <style name="EtStyle1" parent="textStyle1">
-        <item name="android:paddingStart">2dp</item>
-        <item name="android:paddingEnd">2dp</item>
-    </style>
-
     <style name="ownerInfoText">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@android:color/tertiary_text_dark</item>
         <item name="android:layout_marginStart">2dp</item>
+    </style>
+
+    <style name="repoDetailText">
+        <item name="android:minWidth">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginStart">8dp</item>
     </style>
 
 </resources>

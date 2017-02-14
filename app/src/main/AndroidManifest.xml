@@ -7,7 +7,7 @@
     <application
         android:name=".GApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_github_viewer"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/NoTitleThemeCompat">

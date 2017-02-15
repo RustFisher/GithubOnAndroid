@@ -189,6 +189,7 @@ public class OwnerActivity extends Activity {
         hideOwnerField();
         NetworkCenter.getUserInformationObs(userName)
                 .subscribeOn(Schedulers.newThread())
+                .cacheWithInitialCapacity(5)
                 .doOnNext(new Action1<UserInfo>() {
                     @Override
                     public void call(UserInfo userInfo) {

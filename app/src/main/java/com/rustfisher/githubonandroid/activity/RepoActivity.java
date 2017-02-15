@@ -152,6 +152,7 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
         mProgressDialog.show();
         NetworkCenter.getRepoDetailObs(owner, repo)
                 .subscribeOn(Schedulers.newThread())
+                .cacheWithInitialCapacity(5)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Repo>() {
                     @Override

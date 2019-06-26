@@ -6,13 +6,13 @@ import com.rustfisher.githubonandroid.network.service.IGitHubService;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * Deal with all network task.
@@ -22,7 +22,7 @@ public class NetworkCenter {
     public static final String K_REPO_NAME = "repo_name";
     public static final String K_OWNER = "owner";
 
-    public static final String GITHUB_BASE_URL = "https://api.github.com/";
+    private static final String GITHUB_BASE_URL = "https://api.github.com/";
 
     private static OkHttpClient githubOKClient = new OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
@@ -32,7 +32,7 @@ public class NetworkCenter {
     private static Retrofit githubRetrofit = new Retrofit.Builder()
             .baseUrl(GITHUB_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(githubOKClient)
             .build();
 

@@ -35,14 +35,17 @@ import com.rustfisher.githubonandroid.widget.UserRepoInfo;
 import com.rustfisher.githubonandroid.widget.ViewStore;
 import com.rustfisher.githubonandroid.widget.recyclerview.RepoListAdapter;
 
+import org.reactivestreams.Subscriber;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class OwnerActivity extends Activity {
 
@@ -190,9 +193,9 @@ public class OwnerActivity extends Activity {
         NetworkCenter.getUserInformationObs(userName)
                 .subscribeOn(Schedulers.newThread())
                 .cacheWithInitialCapacity(5)
-                .doOnNext(new Action1<UserInfo>() {
+                .doOnNext(new Consumer<UserInfo>() {
                     @Override
-                    public void call(UserInfo userInfo) {
+                    public void accept(UserInfo userInfo) throws Exception {
                         if (!PageManager.hasHistory(userInfo.getLogin())) {
                             DBManager.getManager().insertOneRecord(userInfo.getLogin());
                             PageManager.setOwnerHistoryTextList(DBManager.getManager().queryHistoryStr());
@@ -200,10 +203,16 @@ public class OwnerActivity extends Activity {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserInfo>() {
+                .subscribe(new Observer<UserInfo>(){
+
                     @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "getUserInformation onCompleted");
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UserInfo userInfo) {
+                        loadUserInfoUI(userInfo);
                     }
 
                     @Override
@@ -212,11 +221,10 @@ public class OwnerActivity extends Activity {
                     }
 
                     @Override
-                    public void onNext(UserInfo userInfo) {
-                        loadUserInfoUI(userInfo);
+                    public void onComplete() {
+                        Log.d(TAG, "getUserInformation onCompleted");
                     }
                 });
-
     }
 
     private void hideOwnerField() {
@@ -257,19 +265,24 @@ public class OwnerActivity extends Activity {
         NetworkCenter.getUserRepoObs(owner)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1() {
+                .doOnNext(new Consumer() {
                     @Override
-                    public void call(Object o) {
+                    public void accept(Object o) throws Exception {
                         Log.d(TAG, "on next " + mOwnerInputField.getEtText());
                         mCollapsingToolbarLayout.setTitle(owner);
                         PageManager.saveUserName(owner);
                     }
                 })
-                .subscribe(new Subscriber<ArrayList<UserRepo>>() {
+                .subscribe(new Observer<ArrayList<UserRepo>>() {
                     @Override
-                    public void onCompleted() {
-                        mProgressDialog.dismiss();
-                        Log.d(TAG, "Get repo onCompleted");
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<UserRepo> userRepos) {
+                        mRepoListAdapter.updateList(UserRepoInfo.packUserRepo(userRepos));
+                        mRepoListAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -280,11 +293,10 @@ public class OwnerActivity extends Activity {
                     }
 
                     @Override
-                    public void onNext(ArrayList<UserRepo> userRepos) {
-                        mRepoListAdapter.updateList(UserRepoInfo.packUserRepo(userRepos));
-                        mRepoListAdapter.notifyDataSetChanged();
+                    public void onComplete() {
+                        mProgressDialog.dismiss();
+                        Log.d(TAG, "Get repo onCompleted");
                     }
-
                 });
     }
 

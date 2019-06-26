@@ -20,14 +20,18 @@ import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.Repo;
 import com.rustfisher.githubonandroid.widget.ViewStore;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * show specific repo
@@ -154,11 +158,20 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
                 .subscribeOn(Schedulers.newThread())
                 .cacheWithInitialCapacity(5)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Repo>() {
+                .subscribe(new Observer<Repo>() {
                     @Override
-                    public void onCompleted() {
-                        mProgressDialog.dismiss();
+                    public void onSubscribe(Disposable d) {
+
                     }
+
+                    @Override
+                    public void onNext(Repo repo) {
+                        if (repo.isFork()) {
+                            mParentBean = repo.getParent();
+                        }
+                        loadRepoUI(repo);
+                    }
+
 
                     @Override
                     public void onError(Throwable e) {
@@ -169,11 +182,8 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     @Override
-                    public void onNext(Repo repo) {
-                        if (repo.isFork()) {
-                            mParentBean = repo.getParent();
-                        }
-                        loadRepoUI(repo);
+                    public void onComplete() {
+                        mProgressDialog.dismiss();
                     }
                 });
     }

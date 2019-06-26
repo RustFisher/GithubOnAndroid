@@ -48,6 +48,7 @@ import io.reactivex.schedulers.Schedulers;
 public class OwnerActivity extends Activity {
 
     private static final String TAG = "rustAppOwnerActivity";
+    private static final String MY_ACT_NAME = "OwnerActivity";
 
     @BindView(R.id.act_root)
     CoordinatorLayout mRoot;
@@ -81,6 +82,7 @@ public class OwnerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NetworkCenter.markPageAlive(MY_ACT_NAME);
         setContentView(R.layout.act_owner);
         initUI();
         initUtils();
@@ -89,12 +91,12 @@ public class OwnerActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "Main act, repo act list size == " + PageManager.getRepoActListSize());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NetworkCenter.markPageDestroy(MY_ACT_NAME);
         PageManager.finishRepoAct();
         unregisterReceiver(mBroadcastReceiver);
         mProgressDialog.dismiss();
@@ -260,7 +262,7 @@ public class OwnerActivity extends Activity {
             return;
         }
         mProgressDialog.show();
-        NetworkCenter.getCenter().getGitHubService().userRepo(owner, "pushed")
+        NetworkCenter.getCenter().getGitHubService().userRepo(MY_ACT_NAME, owner, "pushed")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<List<UserRepo>>() {

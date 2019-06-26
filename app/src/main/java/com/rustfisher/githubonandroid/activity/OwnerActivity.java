@@ -35,9 +35,7 @@ import com.rustfisher.githubonandroid.widget.UserRepoInfo;
 import com.rustfisher.githubonandroid.widget.ViewStore;
 import com.rustfisher.githubonandroid.widget.recyclerview.RepoListAdapter;
 
-import org.reactivestreams.Subscriber;
-
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OwnerActivity extends Activity {
 
-    private static final String TAG = "rustApp";
+    private static final String TAG = "rustAppOwnerActivity";
 
     @BindView(R.id.act_root)
     CoordinatorLayout mRoot;
@@ -190,7 +188,7 @@ public class OwnerActivity extends Activity {
             return;
         }
         hideOwnerField();
-        NetworkCenter.getUserInformationObs(userName)
+        NetworkCenter.getCenter().getGitHubService().userInfo(userName)
                 .subscribeOn(Schedulers.newThread())
                 .cacheWithInitialCapacity(5)
                 .doOnNext(new Consumer<UserInfo>() {
@@ -203,7 +201,7 @@ public class OwnerActivity extends Activity {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<UserInfo>(){
+                .subscribe(new Observer<UserInfo>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -262,25 +260,25 @@ public class OwnerActivity extends Activity {
             return;
         }
         mProgressDialog.show();
-        NetworkCenter.getUserRepoObs(owner)
+        NetworkCenter.getCenter().getGitHubService().userRepo(owner, "pushed")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer() {
+                .doOnNext(new Consumer<List<UserRepo>>() {
                     @Override
-                    public void accept(Object o) throws Exception {
-                        Log.d(TAG, "on next " + mOwnerInputField.getEtText());
+                    public void accept(List<UserRepo> o) throws Exception {
+                        Log.d(TAG, "accept: " + owner);
                         mCollapsingToolbarLayout.setTitle(owner);
                         PageManager.saveUserName(owner);
                     }
                 })
-                .subscribe(new Observer<ArrayList<UserRepo>>() {
+                .subscribe(new Observer<List<UserRepo>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(ArrayList<UserRepo> userRepos) {
+                    public void onNext(List<UserRepo> userRepos) {
                         mRepoListAdapter.updateList(UserRepoInfo.packUserRepo(userRepos));
                         mRepoListAdapter.notifyDataSetChanged();
                     }

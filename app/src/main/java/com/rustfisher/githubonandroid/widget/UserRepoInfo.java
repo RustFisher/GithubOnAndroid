@@ -3,6 +3,7 @@ package com.rustfisher.githubonandroid.widget;
 import com.rustfisher.githubonandroid.network.bean.UserRepo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepoInfo {
     private UserRepo userRepo;
@@ -40,7 +41,7 @@ public class UserRepoInfo {
         isFork = fork;
     }
 
-    public static ArrayList<UserRepoInfo> packUserRepo(ArrayList<UserRepo> userRepoList) {
+    public static ArrayList<UserRepoInfo> packUserRepo(List<UserRepo> userRepoList) {
         ArrayList<UserRepoInfo> infoList = new ArrayList<>();
         for (UserRepo userRepo : userRepoList) {
             infoList.add(new UserRepoInfo(userRepo));

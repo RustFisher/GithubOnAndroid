@@ -13,7 +13,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-
+/**
+ * Provide Github network service
+ */
 public interface IGitHubService {
     @GET("repos/{owner}/{repo}/contributors")
     Call<List<GitHubContributor>> contributors(
@@ -25,6 +27,12 @@ public interface IGitHubService {
             @Path("owner") String owner,
             @Path("repo") String repo);
 
+    /**
+     * Get repos by owner name
+     *
+     * @param owner    name
+     * @param sortType "pushed"
+     */
     @GET("users/{owner}/repos")
     Observable<List<UserRepo>> userRepo(
             @Path("owner") String owner,

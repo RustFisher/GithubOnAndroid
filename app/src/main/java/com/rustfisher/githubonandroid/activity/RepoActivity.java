@@ -20,9 +20,6 @@ import com.rustfisher.githubonandroid.network.NetworkCenter;
 import com.rustfisher.githubonandroid.network.bean.Repo;
 import com.rustfisher.githubonandroid.widget.ViewStore;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -154,7 +151,7 @@ public class RepoActivity extends AppCompatActivity implements View.OnClickListe
         mErrorTv.setVisibility(View.GONE);
         mErrorTv.setText("");
         mProgressDialog.show();
-        NetworkCenter.getRepoDetailObs(owner, repo)
+        NetworkCenter.getCenter().getGitHubService().repo(owner, repo)
                 .subscribeOn(Schedulers.newThread())
                 .cacheWithInitialCapacity(5)
                 .observeOn(AndroidSchedulers.mainThread())

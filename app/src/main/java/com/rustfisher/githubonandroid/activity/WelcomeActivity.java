@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class WelcomeActivity extends Activity {
-    private static final String TAG = "rustApp";
+    private static final String TAG = "rustAppWelcomeAct";
 
     TextView mVersionTv;
 
@@ -78,7 +78,7 @@ public class WelcomeActivity extends Activity {
     }
 
     private void initUI() {
-        mVersionTv = (TextView) findViewById(R.id.versionTv);
+        mVersionTv = findViewById(R.id.versionTv);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
